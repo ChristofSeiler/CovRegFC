@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-In this vignette we go through an entire workflow with real data. We will show how to jointly predict univariate channels brain activity and functional connectivity from experimental conditions. We use the covariance regression model first introduced by Hoff and Niu^[Hoff and Niu, A Covariance Regression Model, Statistica Sinica 2012.].
+In this vignette we go through an entire workflow with real data. We will show how to jointly predict univariate channels brain activity and functional connectivity from experimental conditions. We use the covariance regression model first introduced by Hoff and Niu^[Hoff and Niu (2012), A Covariance Regression Model, Statistica Sinica.].
 
 ```{r}
 library(CovRegFC)
@@ -26,11 +26,15 @@ This data is open access and available from [here](http://doc.ml.tu-berlin.de/hB
 ```{r}
 path = find_package_root_file("vignettes", "data_prepared.Rdata")
 load(path)
+str(data_prepared)
 ```
 
-## Fit Covariance Model
+Define response variables. Can be either regions or channels. Possible channel types are:
 
-Define variables. Can be either regions or all channels, oxy or deoxy. Channel to region assignments needed to order x-axis in coefficient plot.
+* For regional oxy: 'oxy'
+* For reginoal deoxy: 'deoxy'
+* For channel oxy: 'highWL'
+* For channel deoxy: 'lowWL'
 
 ```{r}
 channel_type = "oxy"
@@ -48,16 +52,24 @@ if(str_detect(channel_type,"oxy")) {
     names(data_prepared) %in% name %>% which
   })
 }
+response = names(data)[var_ids]
 ```
 
-Subset data to one the two experiments.
+Subset data to one the two experiments and channels/regions.
 
 ```{r}
 # motor task
 #data = subset(data_prepared,task == "LMI" | task == "RMI") %>% droplevels
 # mental arithmetic task
 data = subset(data_prepared,task == "BL" | task == "MA") %>% droplevels
-str(data)
+```
+
+## Fit Covariance Model
+
+We can turn around regression model and have the experimental conditions be the explantory variables and the protein expression level be the response variable. We can account for correlation between the error terms of the multivariate response variable using covariance regression model. This model is very similar to "seemingly unrelated regressions" (see Zellner^[Zellner (1962), An efficient method of estimating seemingly unrelated regression equations and tests for aggregation bias, JASA.] and Greene^[Greene (2011), Econometric Analysis.]) with an additional random effects term.
+
+```{r}
+# call stan code
 ```
 
 ## Session Info
