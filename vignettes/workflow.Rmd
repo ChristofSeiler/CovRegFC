@@ -1,0 +1,67 @@
+---
+title: "CovRegFC Workflow"
+author: "Christof Seiler"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+In this vignette we go through an entire workflow with real data. We will show how to jointly predict univariate channels brain activity and functional connectivity from experimental conditions. We use the covariance regression model first introduced by Hoff and Niu^[Hoff and Niu, A Covariance Regression Model, Statistica Sinica 2012.].
+
+```{r}
+library(CovRegFC)
+library(devtools)
+library(ggplot2)
+library(stringr)
+library(rprojroot)
+```
+
+## Load Data
+
+This data is open access and available from [here](http://doc.ml.tu-berlin.de/hBCI/). We reshape the data and lead it here now.
+
+```{r}
+path = find_package_root_file("vignettes", "data_prepared.Rdata")
+load(path)
+```
+
+## Fit Covariance Model
+
+Define variables. Can be either regions or all channels, oxy or deoxy. Channel to region assignments needed to order x-axis in coefficient plot.
+
+```{r}
+channel_type = "oxy"
+var_ids = NULL
+if(str_detect(channel_type,"oxy")) {
+  var_ids = str_detect(names(data_prepared),paste0("_",channel_type)) %>% which
+} else if(str_detect(channel_type,"WL")) {
+  frontal = c('AF7Fp1','AF3Fp1','AF3AFz','FpzFp1','FpzAFz','FpzFp2','AF4AFz','AF4Fp2','AF8Fp2')
+  motor_left = c('C5CP5','C5FC5','C5C3','FC3FC5','FC3C3','FC3FC1','CP3CP5','CP3C3','CP3CP1','C1C3','C1FC1','C1CP1')
+  motor_right = c('C2FC2','C2CP2','C2C4','FC4FC2','FC4C4','FC4FC6','CP4CP6','CP4CP2','CP4C4','C6CP6','C6C4','C6FC6')
+  occipital = c('OzPOz','OzO1','OzO2')
+  region_list = list(frontal,motor_left,motor_right,occipital)
+  channel_names_reorderd = paste0(unlist(region_list),channel_type)
+  var_ids = sapply(channel_names_reorderd,function(name) {
+    names(data_prepared) %in% name %>% which
+  })
+}
+```
+
+Subset data to one the two experiments.
+
+```{r}
+# motor task
+#data = subset(data_prepared,task == "LMI" | task == "RMI") %>% droplevels
+# mental arithmetic task
+data = subset(data_prepared,task == "BL" | task == "MA") %>% droplevels
+str(data)
+```
+
+## Session Info
+
+```{r}
+session_info()
+```
