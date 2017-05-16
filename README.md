@@ -2,7 +2,7 @@
 
 ## R Package for Bayesian Analysis of Functional Connectivity
 
-This packge uses the covariance regression model introduced by [Hoff and Niu](https://arxiv.org/abs/1102.5721) to jointly predict univariate channel brain activity and functional connectivity from experimental conditions. It uses a linear model akin to standard univariate linear models.
+This packge uses the [covariance regression model](https://arxiv.org/abs/1102.5721) introduced by Hoff and Niu to jointly predict univariate channel brain activity and functional connectivity from experimental conditions. It uses a linear model akin to standard univariate linear models.
 
 ## Installation
 
