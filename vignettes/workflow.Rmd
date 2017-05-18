@@ -14,9 +14,10 @@ In this vignette we go through an entire workflow with real data. We will show h
 ```{r}
 library(CovRegFC)
 library(devtools)
+library(rprojroot)
 library(ggplot2)
 library(stringr)
-library(rprojroot)
+library(R.matlab)
 ```
 
 ## Load Data
@@ -52,7 +53,20 @@ if(str_detect(channel_type,"oxy")) {
     names(data_prepared) %in% name %>% which
   })
 }
-response = names(data)[var_ids]
+```
+
+Plot channels.
+
+```{r}
+path = find_package_root_file("vignettes", "mnt.mat")
+mnt = readMat(path)
+channel_location = data.frame(names = mnt$mnt[,,1]$clab %>% unlist,
+                              x = mnt$mnt[,,1]$x,
+                              y = mnt$mnt[,,1]$y)
+channel_location$names = as.character(channel_location$names)
+plot_channels(channel_location,
+              x_label = "left <--> right",
+              y_label = "posterior <--> anterior")
 ```
 
 Subset data to one the two experiments and channels/regions.
@@ -62,6 +76,8 @@ Subset data to one the two experiments and channels/regions.
 #data = subset(data_prepared,task == "LMI" | task == "RMI") %>% droplevels
 # mental arithmetic task
 data = subset(data_prepared,task == "BL" | task == "MA") %>% droplevels
+response = names(data)[var_ids]
+response
 ```
 
 ## Fit Covariance Model
@@ -69,7 +85,23 @@ data = subset(data_prepared,task == "BL" | task == "MA") %>% droplevels
 We can turn around regression model and have the experimental conditions be the explantory variables and the protein expression level be the response variable. We can account for correlation between the error terms of the multivariate response variable using covariance regression model. This model is very similar to "seemingly unrelated regressions" (see Zellner^[Zellner (1962), An efficient method of estimating seemingly unrelated regression equations and tests for aggregation bias, JASA.] and Greene^[Greene (2011), Econometric Analysis.]) with an additional random effects term.
 
 ```{r}
-# call stan code
+condition = "task"
+data_subset = data[data$participant %in% 1:10,] %>%
+  subset(.,session == 2) %>%
+  droplevels
+fit_vb = covreg(data_subset,response,condition)
+```
+
+Analyze posterior covariance **unexplained** by simulation conditions.
+
+```{r fig.height=4,fig.width=7}
+plot_unexplained_cov(fit_vb,response)
+```
+
+Analyze posterior covariance **explained** by simulation conditions.
+
+```{r}
+plot_explained_cov(fit_vb,data_subset,response,condition)
 ```
 
 ## Session Info

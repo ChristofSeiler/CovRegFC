@@ -18,11 +18,11 @@ model {
   for (n in 1:N)
     mu[n] = alpha * x[n] + gamma[n] * beta * x[n];
   L_Sigma = diag_pre_multiply(L_sigma, L_Omega);
-  //to_vector(alpha) ~ normal(0, 5);
-  //to_vector(beta) ~ normal(0, 5);
+  to_vector(alpha) ~ normal(0, 5);
+  to_vector(beta) ~ normal(0, 5);
   gamma ~ normal(0,1);
   L_Omega ~ lkj_corr_cholesky(1);
-  //L_sigma ~ cauchy(0, 2.5);
+  L_sigma ~ cauchy(0, 2.5);
   y ~ multi_normal_cholesky(mu, L_Sigma);
 }
 generated quantities {
