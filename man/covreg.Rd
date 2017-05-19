@@ -4,7 +4,7 @@
 \alias{covreg}
 \title{Covariance regression model using Stan}
 \usage{
-covreg(data, response, condition)
+covreg(data, response, condition, num_chains = 2)
 }
 \description{
 Covariance regression model using Stan

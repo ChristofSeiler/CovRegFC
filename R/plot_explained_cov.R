@@ -8,7 +8,7 @@
 #'
 plot_explained_cov <- function(fit,data,response,condition) {
   condition_names = data[,condition] %>% contrasts %>% rownames %>% rev
-  beta = rstan::extract(fit_vb,pars = "beta")[[1]]
+  beta = rstan::extract(fit,pars = "beta")[[1]]
   col_number = 2
   beta_2_perc = apply(beta[,,col_number],MARGIN = 2,function(vec)
     quantile(vec,probs = c(0.025/nrow(beta),

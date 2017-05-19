@@ -2,8 +2,11 @@
 
 export(covreg)
 export(plot_channels)
+export(plot_diagnostics)
 export(plot_explained_cov)
+export(plot_explained_cov_diagnostics)
 export(plot_unexplained_cov)
+export(plot_unexplained_cov_diagnostics)
 import(cowplot)
 import(ggplot2)
 import(reshape2)
