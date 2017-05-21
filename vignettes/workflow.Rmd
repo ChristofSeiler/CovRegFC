@@ -87,17 +87,14 @@ We can turn around regression model and have the experimental conditions be the 
 ```{r}
 condition = "task"
 # select session
-data = subset(data,session == 2)
+data_subset = subset(data,session == 2) %>% .[.$participant %in% 1:2,] %>% droplevels
 # subsample time points within each participant
-n_tp = 4000
-subsample_ids = lapply(levels(data$participant),function(part_id) {
-  ids = which(data$participant == part_id)
-  sample(x = ids,size = round(n_tp/length(levels(data$participant))))
-}) %>% unlist
-data_subset = data[subsample_ids,] %>% droplevels
-# subsample subjects
-#data_subset = data[data$participant %in% 1:2,] %>%
-#  droplevels
+# n_tp = 10000
+# subsample_ids = lapply(levels(data_subset$participant),function(part_id) {
+#   ids = which(data_subset$participant == part_id)
+#   sample(x = ids,size = round(n_tp/length(levels(data_subset$participant))))
+# }) %>% unlist
+# data_subset = data_subset[subsample_ids,]
 fit = covreg(data_subset,response,condition)
 ```
 
