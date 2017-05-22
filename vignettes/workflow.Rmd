@@ -133,7 +133,7 @@ plot_unexplained_cov(fit,response)
 
 Analyze posterior covariance **explained** by simulation conditions.
 
-```{r}
+```{r fig.height=5,fig.width=10}
 plot_explained_cov(fit,data_subset,response,condition,
                    channel_location,
                    x_label = "left <--> right",

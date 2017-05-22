@@ -44,5 +44,5 @@ plot_unexplained_cov <- function(fit,response) {
     coord_flip()
 
   # combine
-  plot_grid(ggobj_corr, ggobj_std, labels = NULL, align = 'h', scale = c(1,0.8))
+  plot_grid(ggobj_corr, ggobj_std, labels = NULL, align = 'h', rel_widths = c(2,1))
 }

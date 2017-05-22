@@ -37,14 +37,14 @@ plot_explained_cov <- function(fit,data,response,condition,channel_location,x_la
     geom_point() +
     geom_segment(mapping=aes(x=low, y=channel_name, xend=high, yend=channel_name)) +
     labs(title = paste0("Contrast: ",paste(condition_names,collapse = " vs. "))) +
-    xlab("Coefficient") +
+    xlab("coefficient") +
     theme(axis.title.y = element_blank())
 
   coor_brain = brain(channel_location,c(0, 0), npoints = 100)
   p_brain = ggplot(df_combo) +
     geom_path(data = coor_brain, aes(x = x, y = y), colour = "gray65") +
     geom_point(aes(x = x, y = y,size = uncertainty,color = sign)) +
-    geom_text(aes(x = x, y = y, label = names)) +
+    geom_text(aes(x = x, y = y, label = names),alpha = 0.5) +
     scale_size_continuous(range = c(3,6)) +
     theme(axis.line=element_blank(),
           axis.text = element_blank(),
