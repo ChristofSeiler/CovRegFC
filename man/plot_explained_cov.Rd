@@ -4,7 +4,8 @@
 \alias{plot_explained_cov}
 \title{Plot unexplained covariance part.}
 \usage{
-plot_explained_cov(fit, data, response, condition)
+plot_explained_cov(fit, data, response, condition, channel_location, x_label,
+  y_label)
 }
 \description{
 Plot unexplained covariance part.

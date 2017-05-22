@@ -107,7 +107,7 @@ We can turn around regression model and have the experimental conditions be the 
 ```{r}
 condition = "task"
 # select session
-data_subset = subset(data,session == 2) %>% .[.$participant %in% 1:2,] %>% droplevels
+data_subset = subset(data,session == 2) %>% .[.$participant %in% 1:5,] %>% droplevels
 # subsample time points within each participant
 # n_tp = 10000
 # subsample_ids = lapply(levels(data_subset$participant),function(part_id) {
@@ -115,7 +115,7 @@ data_subset = subset(data,session == 2) %>% .[.$participant %in% 1:2,] %>% dropl
 #   sample(x = ids,size = round(n_tp/length(levels(data_subset$participant))))
 # }) %>% unlist
 # data_subset = data_subset[subsample_ids,]
-fit = covreg(data_subset,response,condition)
+fit = covreg(data_subset,response,condition,num_chains = 1)
 ```
 
 Traceplots to assess convergence of HMC sampler.
@@ -135,10 +135,10 @@ Analyze posterior covariance **explained** by simulation conditions.
 
 ```{r}
 plot_explained_cov(fit,data_subset,response,condition)
-plot_explained_cov_channels(fit,data_subset,response,condition,
-                            region_location,
-                            x_label = "left <--> right",
-                            y_label = "posterior <--> anterior")
+plot_explained_cov(fit,data_subset,response,condition,
+                   region_location,
+                   x_label = "left <--> right",
+                   y_label = "posterior <--> anterior")
 ```
 
 ## Session Info
