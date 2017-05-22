@@ -38,16 +38,19 @@ Define response variables. Can be either regions or channels. Possible channel t
 * For channel deoxy: 'lowWL'
 
 ```{r}
-channel_type = "oxy"
+channel_type = "highWL"
+frontal = c('AF7Fp1','AF3Fp1','AF3AFz','FpzFp1','FpzAFz','FpzFp2','AF4AFz','AF4Fp2','AF8Fp2')
+motor_left = c('C5CP5','C5FC5','C5C3','FC3FC5','FC3C3','FC3FC1','CP3CP5','CP3C3','CP3CP1','C1C3','C1FC1','C1CP1')
+motor_right = c('C2FC2','C2CP2','C2C4','FC4FC2','FC4C4','FC4FC6','CP4CP6','CP4CP2','CP4C4','C6CP6','C6C4','C6FC6')
+occipital = c('OzPOz','OzO1','OzO2')
+region_list = list(frontal=frontal,
+                   motor_left=motor_left,
+                   motor_right=motor_right,
+                   occipital=occipital)
 var_ids = NULL
 if(str_detect(channel_type,"oxy")) {
   var_ids = str_detect(names(data_prepared),paste0("_",channel_type)) %>% which
 } else if(str_detect(channel_type,"WL")) {
-  frontal = c('AF7Fp1','AF3Fp1','AF3AFz','FpzFp1','FpzAFz','FpzFp2','AF4AFz','AF4Fp2','AF8Fp2')
-  motor_left = c('C5CP5','C5FC5','C5C3','FC3FC5','FC3C3','FC3FC1','CP3CP5','CP3C3','CP3CP1','C1C3','C1FC1','C1CP1')
-  motor_right = c('C2FC2','C2CP2','C2C4','FC4FC2','FC4C4','FC4FC6','CP4CP6','CP4CP2','CP4C4','C6CP6','C6C4','C6FC6')
-  occipital = c('OzPOz','OzO1','OzO2')
-  region_list = list(frontal,motor_left,motor_right,occipital)
   channel_names_reorderd = paste0(unlist(region_list),channel_type)
   var_ids = sapply(channel_names_reorderd,function(name) {
     names(data_prepared) %in% name %>% which
@@ -65,6 +68,23 @@ channel_location = data.frame(names = mnt$mnt[,,1]$clab %>% unlist,
                               y = mnt$mnt[,,1]$y)
 channel_location$names = as.character(channel_location$names)
 plot_channels(channel_location,
+              x_label = "left <--> right",
+              y_label = "posterior <--> anterior")
+```
+
+Plot regions.
+
+```{r}
+region_location = lapply(1:length(region_list),function(i) {
+  region = region_list[[i]]
+  coord = channel_location[str_detect(region,
+                              channel_location$names),
+                   c("x","y")] %>% colMeans
+  data.frame(names=names(region_list)[i],x = coord[1],y = coord[2])
+}) %>% do.call(rbind,.)
+rownames(region_location) = NULL
+region_location$names = as.character(region_location$names)
+plot_channels(region_location,
               x_label = "left <--> right",
               y_label = "posterior <--> anterior")
 ```
@@ -115,6 +135,10 @@ Analyze posterior covariance **explained** by simulation conditions.
 
 ```{r}
 plot_explained_cov(fit,data_subset,response,condition)
+plot_explained_cov_channels(fit,data_subset,response,condition,
+                            region_location,
+                            x_label = "left <--> right",
+                            y_label = "posterior <--> anterior")
 ```
 
 ## Session Info
