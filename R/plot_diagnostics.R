@@ -7,29 +7,22 @@
 #' @export
 #'
 plot_diagnostics <- function(fit,par_name,num_par = 8) {
-
-  # during warmup
+  # keep only num_par paramters to avoid overloaded plots
   param = rstan::extract(fit,
                          pars = par_name,
                          permuted = FALSE,
                          inc_warmup = TRUE)
-  # keep only 8 paramters to avoid an overcrowed plot
   par_subset_ids = sample(dim(param)[3],size = num_par) %>% sort
-  param_long = melt(param[1:fit@stan_args[[1]]$warmup,,par_subset_ids],
-                      varnames = c("iteration","chain","parameter"))
-  p1 = ggplot(param_long, aes(x = iteration, y = value, color = parameter)) +
+  param_long_during = melt(param[1:fit@stan_args[[1]]$warmup,,par_subset_ids],
+                      varnames = c("iteration","parameter"))
+  param_long_during$phase = "during warmup"
+  param_long_after = melt(param[(fit@stan_args[[1]]$warmup+1):dim(param)[1],,par_subset_ids],
+                    varnames = c("iteration","parameter"))
+  param_long_after$phase = "after warmup"
+  param_long = rbind(param_long_during,param_long_after)
+  param_long$phase = factor(param_long$phase,levels = c("during warmup","after warmup"))
+  ggplot(param_long, aes(x = iteration, y = value, color = parameter)) +
     geom_line() +
-    facet_wrap(~ chain) +
-    ggtitle("During Warmup")
-
-  # after warmup
-  param_long = melt(param[fit@stan_args[[1]]$warmup:dim(param)[1],,par_subset_ids],
-                      varnames = c("iteration","chain","parameter"))
-  p2 = ggplot(param_long, aes(x = iteration, y = value, color = parameter)) +
-    geom_line() +
-    facet_wrap(~ chain) +
-    ggtitle("After Warmup")
-
-  # combine
-  plot_grid(p1,p2,nrow = 2,ncol = 1,align = "v")
+    facet_wrap(~ phase) +
+    ggtitle("Traceplot")
 }

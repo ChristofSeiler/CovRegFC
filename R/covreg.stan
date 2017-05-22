@@ -26,16 +26,16 @@ model {
   y ~ multi_normal_cholesky(mu, L_Sigma);
 }
 generated quantities {
-  vector[K] mu[N];
-  matrix[K, K] L_Sigma;
+  //vector[K] mu[N];
+  //matrix[K, K] L_Sigma;
   corr_matrix[K] Omega;
-  vector[K] y_tilde[N];
+  //vector[K] y_tilde[N];
   // correlation matrix
   Omega = multiply_lower_tri_self_transpose(L_Omega);
   // predictive check
-  L_Sigma = diag_pre_multiply(L_sigma, L_Omega);
-  for(n in 1:N) {
-    mu[n] = alpha * x[n] + gamma[n] * beta * x[n];
-    y_tilde[n] = multi_normal_cholesky_rng(mu[n], L_Sigma);
-  }
+  //L_Sigma = diag_pre_multiply(L_sigma, L_Omega);
+  //for(n in 1:N) {
+  //  mu[n] = alpha * x[n] + gamma[n] * beta * x[n];
+  //  y_tilde[n] = multi_normal_cholesky_rng(mu[n], L_Sigma);
+  //}
 }

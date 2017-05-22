@@ -4,7 +4,9 @@
 #' @import rprojroot
 #' @export
 #'
-covreg <- function(data,response,condition,num_chains = 2) {
+covreg <- function(data,response,condition,seed = 231248) {
+
+  num_chains = 1
 
   # load stan model from file
   file = find_package_root_file("R", "covreg.stan")
@@ -33,13 +35,19 @@ covreg <- function(data,response,condition,num_chains = 2) {
     init_data_all[[i]] = init_data
 
   # run Stan with variational inference
-  seed = 1
+  # seed = 231248
   fit = sampling(model,
                  data = stan_data,
                  init = init_data_all,
                  iter = 200,
                  chains = num_chains,
                  cores = num_chains,
-                 seed = seed)#,pars = c("pi","beta"))
+                 seed = seed,
+                 pars = c("L_sigma","Omega","beta"))
+  # fit = vb(model,
+  #          data = stan_data,
+  #          init = init_data_all[[1]],
+  #          seed = seed,
+  #          pars = c("pi","beta"))
   fit
 }

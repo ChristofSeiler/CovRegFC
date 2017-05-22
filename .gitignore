@@ -2,3 +2,5 @@
 .Rproj.user
 
 .Rhistory
+
+vignettes/data_prepared.Rdata

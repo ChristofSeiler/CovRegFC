@@ -23,7 +23,7 @@ plot_unexplained_cov <- function(fit,response) {
                          limit = c(-1,1),
                          name = "") +
     theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
+    theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust = 1),
           axis.title.x=element_blank(),
           axis.title.y=element_blank()) +
     coord_fixed() +
@@ -33,13 +33,15 @@ plot_unexplained_cov <- function(fit,response) {
   sigma = rstan::extract(fit,pars = "L_sigma")[[1]]
   sigma_median = apply(X = sigma,MARGIN = c(2),FUN = median)
   df_std = data.frame(channel = response,sigma = sigma_median)
+  df_std$channel = factor(df_std$channel,levels = response)
   ggobj_std = ggplot(df_std,aes(channel,sigma)) +
     geom_bar(colour="black", stat="identity") +
     theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
+    theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust = 1),
           axis.title.x=element_blank(),
           axis.title.y=element_blank()) +
-    ggtitle("Standard Deviations")
+    ggtitle("Standard Deviations") +
+    coord_flip()
 
   # combine
   plot_grid(ggobj_corr, ggobj_std, labels = NULL, align = 'h', scale = c(1,0.8))
