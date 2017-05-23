@@ -1,7 +1,6 @@
 #' Covariance regression model using Stan
 #'
 #' @import rstan
-#' @import rprojroot
 #' @export
 #'
 covreg <- function(data,response,condition,seed = 231248) {
@@ -9,7 +8,7 @@ covreg <- function(data,response,condition,seed = 231248) {
   num_chains = 1
 
   # load stan model from file
-  file = find_package_root_file("R", "covreg.stan")
+  file = system.file("exec", "covreg.stan", package = "CovRegFC")
   model = stan_model(file = file,
                      model_name = "covreg_model")
 
