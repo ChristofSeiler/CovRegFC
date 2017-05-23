@@ -21,7 +21,7 @@ plot_explained_cov <- function(fit,data,response,condition,channel_location,x_la
   matching_ids = sapply(as.character(df$channel_name),function(channel_name)
     str_detect(channel_name,channel_location$names) %>% which)
   df_combo = cbind(df,channel_location[matching_ids,])
-  df_combo$uncertainty = abs(df_combo$high-df_combo$low)
+  df_combo$confidence = abs(df_combo$mid)/abs(df_combo$high-df_combo$low)
   detect_sign = function(a,b) {
     if(sign(a) > 0 & sign(b) > 0) { return("positive") }
     else if(sign(a) < 0 & sign(b) < 0) { return("negative") }
@@ -43,9 +43,9 @@ plot_explained_cov <- function(fit,data,response,condition,channel_location,x_la
   coor_brain = brain(channel_location,c(0, 0), npoints = 100)
   p_brain = ggplot(df_combo) +
     geom_path(data = coor_brain, aes(x = x, y = y), colour = "gray65") +
-    geom_point(aes(x = x, y = y,size = uncertainty,color = sign)) +
+    geom_point(aes(x = x, y = y,size = confidence,color = sign)) +
     geom_text(aes(x = x, y = y, label = names),alpha = 0.5) +
-    scale_size_continuous(range = c(3,6)) +
+    scale_size_continuous(range = c(3,10)) +
     theme(axis.line=element_blank(),
           axis.text = element_blank(),
           axis.ticks = element_blank()) +
