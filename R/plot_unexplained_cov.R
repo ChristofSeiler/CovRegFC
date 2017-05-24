@@ -40,7 +40,7 @@ plot_unexplained_cov <- function(fit,response) {
     theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust = 1),
           axis.title.x=element_blank(),
           axis.title.y=element_blank()) +
-    ggtitle("Standard Deviations") +
+    ggtitle("SD") +
     coord_flip()
 
   # combine
