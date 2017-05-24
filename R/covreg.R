@@ -3,7 +3,7 @@
 #' @import rstan
 #' @export
 #'
-covreg <- function(data,response,condition,seed = 231248) {
+covreg <- function(data,response,condition,participant,seed = 231248) {
 
   num_chains = 1
 
@@ -15,7 +15,7 @@ covreg <- function(data,response,condition,seed = 231248) {
   # build design matrix
   Y = data[,response] %>% as.matrix
   colnames(Y)
-  X = model.matrix(as.formula(paste("~",condition)), data = data)
+  X = model.matrix(as.formula(paste("~",condition,"+",participant)), data = data)
   attr(X, "assign") = NULL
   stan_data = list(K = ncol(Y),
                    J = ncol(X),
@@ -34,7 +34,6 @@ covreg <- function(data,response,condition,seed = 231248) {
     init_data_all[[i]] = init_data
 
   # run Stan with variational inference
-  # seed = 231248
   fit = sampling(model,
                  data = stan_data,
                  init = init_data_all,
@@ -47,6 +46,6 @@ covreg <- function(data,response,condition,seed = 231248) {
   #          data = stan_data,
   #          init = init_data_all[[1]],
   #          seed = seed,
-  #          pars = c("pi","beta"))
+  #          pars = c("L_sigma","Omega","beta"))
   fit
 }
