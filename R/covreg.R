@@ -42,6 +42,7 @@ covreg <- function(data,response,condition,participant,seed = 231248) {
                  cores = num_chains,
                  seed = seed,
                  pars = c("L_sigma","Omega","beta"))
+  # vartional inference fails
   # fit = vb(model,
   #          data = stan_data,
   #          init = init_data_all[[1]],
