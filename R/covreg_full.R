@@ -3,7 +3,7 @@
 #' @import rstan
 #' @export
 #'
-covreg_full <- function(YY,X,N,seed) {
+covreg_full <- function(YY,X,N,scov_short_mean,scov_conventional_mean,seed) {
 
   stan_data = list(K = dim(YY)[1],
                    P = dim(YY)[2],
