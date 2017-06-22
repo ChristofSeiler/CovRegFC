@@ -3,7 +3,7 @@
 #' @import rstan
 #' @export
 #'
-covreg_reduced <- function(data,
+covreg_low <- function(data,
                            response,
                            condition,
                            #batch,
