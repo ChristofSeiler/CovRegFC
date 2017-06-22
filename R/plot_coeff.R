@@ -69,19 +69,35 @@ plot_coeff <- function(fit,response,alpha = 0.05,title = "",brain_slices = NULL)
       labs(title = title) +
       xlab("coefficient") +
       theme(axis.title.y = element_blank())
-    p_coeff
 
     # brain
     ps = lapply(neg_ids,function(i) plot_brain(brain_slices[i],title = paste0("R",i)) )
-    p_brains_neg = do.call(plot_grid,c(ps,ncol = 4,nrow = 3)) + ggtitle("Parcel Set 1")
+    p_brains_neg = NULL
+    if(length(ps) > 0)
+      p_brains_neg = do.call(plot_grid,c(ps,ncol = 4,nrow = 3)) + ggtitle("Parcel Set 1")
     ps = lapply(pos_ids,function(i) plot_brain(brain_slices[i],title = paste0("R",i)) )
-    p_brains_pos = do.call(plot_grid,c(ps,ncol = 4,nrow = 3)) + ggtitle("Parcel Set 2")
+    p_brains_pos = NULL
+    if(length(ps) > 0)
+      p_brains_pos = do.call(plot_grid,c(ps,ncol = 4,nrow = 3)) + ggtitle("Parcel Set 2")
 
     # combine
-    plot_grid(p_brains_neg,
-              p_coeff,
-              p_brains_pos,
-              ncol = 3,align = "h")
+    if(is.null(p_brains_neg) && is.null(p_brains_pos)) {
+      p_coeff
+    } else if(is.null(p_brains_neg)) {
+      plot_grid(p_coeff,
+                p_brains_pos,
+                ncol = 2,align = "h")
+    } else if(is.null(p_brains_pos)) {
+      plot_grid(p_brains_neg,
+                p_coeff,
+                ncol = 2,align = "h")
+    } else {
+      plot_grid(p_brains_neg,
+                p_coeff,
+                p_brains_pos,
+                ncol = 3,align = "h")
+    }
+
   } else {
     return(list(set1 = pos_ids,set2 = neg_ids))
   }
