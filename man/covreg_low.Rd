@@ -2,10 +2,10 @@
 % Please edit documentation in R/covreg_low.R
 \name{covreg_low}
 \alias{covreg_low}
-\title{Reduced covariance regression model using Stan}
+\title{Low-dimensional covariance regression model using Stan.}
 \usage{
 covreg_low(data, response, condition, participant, seed = 112243)
 }
 \description{
-Reduced covariance regression model using Stan
+Low-dimensional covariance regression model using Stan.
 }

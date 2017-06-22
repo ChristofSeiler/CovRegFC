@@ -2,10 +2,10 @@
 % Please edit documentation in R/covreg_full.R
 \name{covreg_full}
 \alias{covreg_full}
-\title{Full covariance regression model using Stan}
+\title{Full covariance regression model using Stan.}
 \usage{
-covreg_full()
+covreg_full(YY, X, N, scov_short_mean, scov_conventional_mean, seed)
 }
 \description{
-Full covariance regression model using Stan
+Full covariance regression model using Stan.
 }
