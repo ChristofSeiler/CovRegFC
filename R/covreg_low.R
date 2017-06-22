@@ -4,11 +4,11 @@
 #' @export
 #'
 covreg_low <- function(data,
-                           response,
-                           condition,
-                           #batch,
-                           participant,
-                           seed = 112243) {
+                       response,
+                       condition,
+                       #batch,
+                       participant,
+                       seed = 112243) {
 
   num_chains = 1
 
