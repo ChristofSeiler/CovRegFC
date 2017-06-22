@@ -9,4 +9,3 @@ covreg_full()
 \description{
 Full covariance regression model using Stan
 }
-

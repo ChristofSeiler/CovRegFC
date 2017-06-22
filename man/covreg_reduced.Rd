@@ -9,4 +9,3 @@ covreg_reduced(data, response, condition, participant, seed = 112243)
 \description{
 Reduced covariance regression model using Stan
 }
-

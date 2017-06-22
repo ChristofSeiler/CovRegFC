@@ -2,7 +2,11 @@
 
 export(covreg_full)
 export(covreg_reduced)
+export(plot_brain)
+export(plot_coeff)
+export(plot_corr_da)
 export(plot_diagnostics)
+export(plot_post_mean)
 import(cowplot)
 import(ggplot2)
 import(reshape2)
