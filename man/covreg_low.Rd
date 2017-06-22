@@ -4,7 +4,7 @@
 \alias{covreg_low}
 \title{Low-dimensional covariance regression model using Stan.}
 \usage{
-covreg_low(data, response, condition, participant, seed = 112243)
+covreg_low(data, response, condition, seed = 112243)
 }
 \description{
 Low-dimensional covariance regression model using Stan.

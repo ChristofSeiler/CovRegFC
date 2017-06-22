@@ -7,7 +7,7 @@ covreg_low <- function(data,
                        response,
                        condition,
                        #batch,
-                       participant,
+                       #participant,
                        seed = 112243) {
 
   num_chains = 1
@@ -21,8 +21,8 @@ covreg_low <- function(data,
   Y = as.matrix(data[,response])
   colnames(Y)
   #X = model.matrix(as.formula(paste("~",condition,"+",batch)), data = data)
-  X = model.matrix(as.formula(paste("~",condition,"+",participant)), data = data)
-  #X = model.matrix(as.formula(paste("~",condition)), data = data)
+  #X = model.matrix(as.formula(paste("~",condition,"+",participant)), data = data)
+  X = model.matrix(as.formula(paste("~",condition)), data = data)
   attr(X, "assign") = NULL
   stan_data = list(K = ncol(Y),
                    J = ncol(X),
