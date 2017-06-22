@@ -1,4 +1,4 @@
-#' Reduced covariance regression model using Stan
+#' Low-dimensional covariance regression model using Stan.
 #'
 #' @import rstan
 #' @export
