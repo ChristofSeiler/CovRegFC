@@ -2,7 +2,15 @@
 
 ## R Package for Bayesian Analysis of Functional Connectivity
 
-This packge uses the [covariance regression model](https://arxiv.org/abs/1102.5721) introduced by Hoff and Niu to jointly predict univariate channel brain activity and functional connectivity from experimental conditions. It uses a linear model akin to standard univariate linear models and extends it to model the functional connectivity matrix.
+This package implements our paper:
+
+```
+Multivariate Heteroscedasticity Models for Functional Brain Connectivity, 
+C. Seiler and S. Holmes, 
+bioRxiv 2017.
+```
+
+It uses a linear model akin to standard univariate linear models and extends it to model the functional connectivity matrix.
 
 ## Installation
 
@@ -15,8 +23,6 @@ devtools::install_github("ChristofSeiler/CovRegFC",build_vignettes = TRUE)
 
 ## Getting Started
 
-Read the vignette for a step-by-step example workflow:
+Read the step-by-step example analysis of data from the Human Connectome Project available here:
 
-```
-vignette("workflow", package = "CovRegFC")
-```
+https://github.com/ChristofSeiler/CovRegFC_HCP
