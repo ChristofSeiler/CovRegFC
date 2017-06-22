@@ -1,6 +1,6 @@
 # CovRegFC
 
-## R Package for Bayesian Analysis of Functional Connectivity
+## R Package for Multivariate Heteroscedasticity Models for Functional Connectivity
 
 This package implements our paper:
 
