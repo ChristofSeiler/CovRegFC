@@ -18,7 +18,7 @@ The R package is available from github and can be installed by running the follo
 
 ```
 install.packages("devtools")
-devtools::install_github("ChristofSeiler/CovRegFC",build_vignettes = TRUE)
+devtools::install_github("ChristofSeiler/CovRegFC")
 ```
 
 ## Getting Started
