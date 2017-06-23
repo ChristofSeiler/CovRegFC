@@ -1,12 +1,11 @@
 Package: CovRegFC
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Multivariate Heteroscedasticity Models for Functional Brain Connectivity
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Christof Seiler and Susan Holmes
+Maintainer: Christof Seiler <christof.seiler@stanford.edu>
+Description: Functional brain connectivity is the co-occurrence of brain activity in different areas during resting and while doing tasks. The data of interest are multivariate timeseries measured simultaneously across brain parcels using resting-state MRI. This package implements two heteroscedasticity models in Stan to analyze functional connectivity.
+License: LGPL-3
 Encoding: UTF-8
 LazyData: true
 Imports:
