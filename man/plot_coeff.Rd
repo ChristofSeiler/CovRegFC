@@ -4,7 +4,8 @@
 \alias{plot_coeff}
 \title{Calculate parcel set and plot coefficient.}
 \usage{
-plot_coeff(fit, response, alpha = 0.05, title = "", brain_slices = NULL)
+plot_coeff(fit, response, alpha = 0.05, title = "", brain_slices = NULL,
+  FDR = FALSE, brain_nrow = 3, coeff_labels = response)
 }
 \description{
 Calculate parcel set and plot coefficient.

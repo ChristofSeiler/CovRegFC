@@ -6,7 +6,14 @@
 #' @import cowplot
 #' @export
 #'
-plot_coeff <- function(fit,response,alpha = 0.05,title = "",brain_slices = NULL) {
+plot_coeff <- function(fit,
+                       response,
+                       alpha = 0.05,
+                       title = "",
+                       brain_slices = NULL,
+                       FDR = FALSE,
+                       brain_nrow = 3,
+                       coeff_labels = response) {
   if (!inherits(fit, "stanfit"))
     stop("Not a stanfit object.")
   if (fit@mode != 0)
@@ -38,7 +45,7 @@ plot_coeff <- function(fit,response,alpha = 0.05,title = "",brain_slices = NULL)
   beta_da_neg = lapply(1:num_sim,function(i) beta[i,,col_number] > 0) %>% Reduce('+', .)
   # posterior expected FDR
   # see Mitra, Mueller, and Ji (2016) for an application to connectivity
-  fdr_threshold = function(beta_da,FDR) {
+  fdr_threshold = function(beta_da,alpha) {
     ps = beta_da / num_sim
     ps[ps==0] = 1/num_sim
     seq_kappa = seq(0.5,1,1/num_sim/10)
@@ -48,15 +55,17 @@ plot_coeff <- function(fit,response,alpha = 0.05,title = "",brain_slices = NULL)
       FDR_kappa = sum((1-ps)*I)/sum(I)
       c(kappa=kappa,FDR_kappa=FDR_kappa)
     }) %>% t %>% data.frame
-    kappa = df_kappa[which(df_kappa$FDR_kappa <= FDR)[1],"kappa"]
+    kappa = df_kappa[which(df_kappa$FDR_kappa <= alpha)[1],"kappa"]
     ps > kappa
   }
 
-  # fdr control
-  #ids = fdr_threshold(c(beta_da_neg,beta_da_pos),alpha)
-
-  # uncorrected
-  ids = c(beta_da_neg,beta_da_pos)/num_sim <= alpha
+  if(FDR) {
+    # fdr control
+    ids = fdr_threshold(c(beta_da_neg,beta_da_pos),alpha)
+  } else {
+    # uncorrected
+    ids = c(beta_da_neg,beta_da_pos)/num_sim <= alpha
+  }
 
   neg_ids = ids[1:length(beta_da_neg)] %>% which
   pos_ids = ids[(length(beta_da_neg)+1):length(ids)] %>% which
@@ -68,17 +77,18 @@ plot_coeff <- function(fit,response,alpha = 0.05,title = "",brain_slices = NULL)
       geom_segment(mapping=aes(x=low, y=channel_name, xend=high, yend=channel_name)) +
       labs(title = title) +
       xlab("coefficient") +
-      theme(axis.title.y = element_blank())
+      theme(axis.title.y = element_blank()) +
+      scale_y_discrete(breaks = coeff_labels)
 
     # brain
     ps = lapply(neg_ids,function(i) plot_brain(brain_slices[i],title = paste0("R",i)) )
     p_brains_neg = NULL
     if(length(ps) > 0)
-      p_brains_neg = do.call(plot_grid,c(ps,ncol = 4,nrow = 3)) + ggtitle("Parcel Set 1")
+      p_brains_neg = do.call(plot_grid,c(ps,ncol = 4,nrow = brain_nrow)) + ggtitle("Parcel Set 1")
     ps = lapply(pos_ids,function(i) plot_brain(brain_slices[i],title = paste0("R",i)) )
     p_brains_pos = NULL
     if(length(ps) > 0)
-      p_brains_pos = do.call(plot_grid,c(ps,ncol = 4,nrow = 3)) + ggtitle("Parcel Set 2")
+      p_brains_pos = do.call(plot_grid,c(ps,ncol = 4,nrow = brain_nrow)) + ggtitle("Parcel Set 2")
 
     # combine
     if(is.null(p_brains_neg) && is.null(p_brains_pos)) {
